@@ -4,7 +4,9 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
+use App\Controller\Api\Auth\LoginController;
 use App\Controller\Api\Auth\RegisterController;
+use App\DTO\Input\User\LoginInput;
 use App\DTO\Input\User\RegisterInput;
 use App\Helper\EndpointRoutes;
 use App\Repository\UserRepository;
@@ -19,9 +21,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Post(
             uriTemplate: self::POST_REGISTER, controller: RegisterController::class, input: RegisterInput::class, name: EndpointRoutes::USER_REGISTER_POST, status: Response::HTTP_CREATED
         ),
+        new Post(
+            uriTemplate: self::POST_LOGIN, controller: LoginController::class, input: LoginInput::class, name: EndpointRoutes::USER_LOGIN_POST
+        ),
     ],
-    normalizationContext: ['groups' => ['user:read']],
-    denormalizationContext: ['groups' => ['user:write']]
+    normalizationContext: ['groups' => ['user:read', 'login']],
+    denormalizationContext: ['groups' => ['user:write', 'login']]
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -31,6 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public const ROLE_USER = 'ROLE_USER';
 
     public const POST_REGISTER = '/register';
+    public const POST_LOGIN = '/login';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

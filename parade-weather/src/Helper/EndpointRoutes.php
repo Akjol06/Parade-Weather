@@ -5,5 +5,6 @@ namespace App\Helper;
 class EndpointRoutes
 {
     // -- User -- #
-    public const USER_REGISTER_POST = '/register';
+    public const USER_REGISTER_POST = 'user_register_post';
+    public const USER_LOGIN_POST = 'user_login_post';
 }

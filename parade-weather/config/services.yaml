@@ -5,6 +5,8 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
 
+imports:
+  - { resource: 'packages/api_endpoint_settings.yaml' }
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -16,5 +18,16 @@ services:
     App\:
         resource: '../src/'
 
+    App\OpenApi\OpenApiFactory:
+        decorates: 'api_platform.openapi.factory'
+        arguments:
+            - '@App\OpenApi\OpenApiFactory.inner'
+            - '@translator.default'
+            - '%user_token_use_endpoints_required%'
+
+
+    App\Controller\Api\Auth\LoginController:
+        arguments:
+            $jwtSecret: '%env(JWT_SECRET)%'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

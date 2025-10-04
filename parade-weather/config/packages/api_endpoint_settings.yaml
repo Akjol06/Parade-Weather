@@ -1,0 +1,4 @@
+parameters:
+  user_token_use_endpoints_required:
+    - user_register_post
+    - 

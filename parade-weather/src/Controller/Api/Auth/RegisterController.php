@@ -23,7 +23,7 @@ class RegisterController extends AbstractController
         try {
             $user = $registrationService->register($data);
 
-            return $this->json([
+            return new JsonResponse([
                 'id' => $user->getId(),
                 'email' => $user->getEmail(),
                 'roles' => $user->getRoles(),
@@ -31,7 +31,7 @@ class RegisterController extends AbstractController
                 'updatedAt' => $user->getUpdatedAt()->format('Y-m-d H:i:s'),
             ], 201);
         } catch (\Throwable $e) {
-            return $this->json(['error' => $e->getMessage()], 400);
+            return new JsonResponse(['error' => $e->getMessage()], 400);
         }
     }
 }
