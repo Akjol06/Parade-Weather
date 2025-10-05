@@ -39,6 +39,8 @@ security:
             provider: clients
             custom_authenticators:
                 - App\Security\ApiAuthenticator
+                - App\Security\JwtUserAuthenticator
+
 
     access_control:
         # - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

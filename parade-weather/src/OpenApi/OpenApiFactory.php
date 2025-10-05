@@ -21,6 +21,16 @@ final class OpenApiFactory implements OpenApiFactoryInterface
         ['type' => 'string'],
     ];
 
+    public const USER_TOKEN_DEFINITION = [
+        'user_token',
+        'header',
+        'JWT токен пользователя (user_token)',
+        true,
+        false,
+        false,
+        ['type' => 'string'],
+    ];
+
     public function __construct(
         private readonly OpenApiFactoryInterface $decorated,
         private readonly TranslatorInterface $translator,
@@ -54,6 +64,14 @@ final class OpenApiFactory implements OpenApiFactoryInterface
 
                 if (!$this->hasParameter($parameters, 'api-token')) {
                     $parameters[] = new Parameter(...self::API_TOKEN_DEFINITION);
+                }
+
+                if (
+                    $operation->getOperationId()
+                    && \in_array($operation->getOperationId(), $this->userTokenRequiredUseEndpoints, true)
+                    && !$this->hasParameter($parameters, 'user_token')
+                ) {
+                    $parameters[] = new Parameter(...self::USER_TOKEN_DEFINITION);
                 }
 
                 $operation = $operation->withParameters($parameters);
